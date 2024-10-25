@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Data model for a single Insight
+model Insight {
+  id        Int      @id @default(autoincrement())
+  requestId String
+  clientId  String
+  insights  String
+  fromTime  DateTime
+  toTime    DateTime
+  createdAt DateTime @default(now())
+}
