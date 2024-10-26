@@ -1,5 +1,5 @@
-# Use the official Node.js image as the base image
-FROM node:23-alpine
+# Stage 1: Build the application
+FROM node:23-slim AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -18,6 +18,22 @@ COPY . .
 
 # Build the application
 RUN pnpm run build
+
+# Stage 2: Create the final image
+FROM node:23-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Copy only the build output from the previous stage
+COPY --from=builder /app/dist ./dist
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Install only production dependencies
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --prod=true
 
 # Expose the port the app runs on
 EXPOSE 4000
