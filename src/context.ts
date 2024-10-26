@@ -2,18 +2,23 @@ import { PrismaClient } from '@prisma/client'
 import { GraphQLError } from 'graphql'
 import type { IncomingMessage, ServerResponse } from 'http'
 
+// Define the context type for data to be shared API-wide
 export interface Context {
   prisma: PrismaClient
 }
 
+// Instantiate a new Prisma client
 const prisma = new PrismaClient()
 
+/*
+ * Method to create the API-wide context (will be passed to the ApolloServer constructor)
+ */
 export const createContext = async ({
   req,
 }: {
   req: IncomingMessage
   res: ServerResponse
-}) => {
+}): Promise<Context> => {
   // Get API key from headers
   const apiKey = req.headers.authorization || ''
 
@@ -28,6 +33,7 @@ export const createContext = async ({
     })
   }
 
+  // return context object
   return {
     prisma: prisma,
   }
