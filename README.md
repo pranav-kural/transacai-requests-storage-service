@@ -93,6 +93,8 @@ Deployment is done on `transac-ai-gke` cluster, with a load balancer service to 
 
 Current policy uses 2 replicas for the deployment, with bare minimum resources for testing purposes.
 
+More information and deployment instructions can be found in the `kubernetes/README.md` file.
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
