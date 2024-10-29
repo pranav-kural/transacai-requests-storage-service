@@ -1,0 +1,13 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: managed-cert-ingress-2
+  annotations:
+    networking.gke.io/managed-certificates: pkural-managed-cert
+spec:
+  ingressClassName: gce
+  defaultBackend:
+    service:
+      name: transac-ai-iss-node-port-service
+      port:
+        number: 80

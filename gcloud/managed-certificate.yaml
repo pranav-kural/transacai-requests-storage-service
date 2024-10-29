@@ -1,0 +1,7 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: pkural-managed-cert
+spec:
+  domains:
+    - transac-ai-iss.pkural.ca
