@@ -80,6 +80,19 @@ The project uses environment variables for configuration. The following environm
 - `DIRECT_URL`: Database connection URL from Supabase but for direct non-pooling connections (for migrations)
 - `TRANSAC_AI_ISS_API_KEY`: API key for securing the ISS API
 
+## Google Kubernetes Engine
+
+The project includes Kubernetes manifests for deploying the ISS service to Google Kubernetes Engine (GKE).
+
+The main manifest files are:
+
+- `kubernetes/deployment.yaml`: Deployment configuration.
+- `kubernetes/service.yaml`: Service configuration for load balancer.
+
+Deployment is done on `transac-ai-gke` cluster, with a load balancer service to expose the deployment to public access on port 80.
+
+Current policy uses 2 replicas for the deployment, with bare minimum resources for testing purposes.
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

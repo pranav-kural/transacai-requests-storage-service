@@ -35,10 +35,10 @@ spec:
                   key: transac-ai-iss-api-key
           resources:
             requests:
-              memory: '1Gi'
-              cpu: '500m'
-              ephemeral-storage: '1Gi'
+              memory: '256Mi'
+              cpu: '100m'
+              ephemeral-storage: '256Mi'
             limits:
-              memory: '1Gi'
-              cpu: '500m'
-              ephemeral-storage: '1Gi'
+              memory: '512Mi'
+              cpu: '200m'
+              ephemeral-storage: '500Mi'
