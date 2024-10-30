@@ -5,7 +5,7 @@ export const Mutation = objectType({
   name: 'Mutation',
   definition(t) {
     t.nonNull.field('createInsight', {
-      type: 'Insight',
+      type: 'Int',
       args: {
         data: nonNull(
           arg({
@@ -13,8 +13,8 @@ export const Mutation = objectType({
           }),
         ),
       },
-      resolve: (_, args, context: Context) => {
-        return context.prisma.insight.create({
+      resolve: async (_, args, context: Context) => {
+        const newInsight = await context.prisma.insight.create({
           data: {
             requestId: args.data.requestId,
             clientId: args.data.clientId,
@@ -23,6 +23,8 @@ export const Mutation = objectType({
             toTime: args.data.toTime,
           },
         })
+        // Return the id of the newly created insight
+        return newInsight.id
       },
     })
 

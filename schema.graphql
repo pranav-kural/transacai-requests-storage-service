@@ -42,7 +42,7 @@ input InsightsTimeRangeInput {
 }
 
 type Mutation {
-  createInsight(data: InsightCreateInput!): Insight!
+  createInsight(data: InsightCreateInput!): Int!
   deleteAllInsightsForClient(clientId: String!): Int!
   deleteInsight(id: Int!): Insight
   deleteInsightByRequestId(data: InsightGetByRequestIdInput!): Insight
