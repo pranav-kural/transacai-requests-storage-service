@@ -111,3 +111,9 @@ curl --request POST \
  --url <EXTERNAL_IP> \
  --data '{"query":"query firstInsight($iId: Int!) {\n insightById(id: $iId) {\n id\n clientId\n fromTime\n toTime\n }\n}","variables":{"iId":1}}'
 ```
+
+To restart the deployment after updating the image, run the following command:
+
+```bash
+kubectl rollout restart deployment transac-ai-iss-gke
+```
