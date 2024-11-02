@@ -10,7 +10,7 @@ export const Query = objectType({
     t.field('requestById', {
       type: 'Request',
       args: {
-        id: nonNull(intArg()),
+        id: nonNull(stringArg()),
         clientId: nonNull(stringArg()),
       },
       resolve: (_, args, context: Context) => {
@@ -90,6 +90,94 @@ export const Query = objectType({
     })
 
     /**
+     * Get all requests with a given records source ID.
+     */
+    t.list.field('requestsByRecordsSourceId', {
+      type: 'Request',
+      args: {
+        data: nonNull(
+          arg({
+            type: 'RequestGetByRecordsSourceIdInput',
+          }),
+        ),
+      },
+      resolve: (_, args, context: Context) => {
+        return context.prisma.request.findMany({
+          where: {
+            clientId: args.data.clientId,
+            recordsSourceId: args.data.recordsSourceId,
+          },
+        })
+      },
+    })
+
+    /**
+     * Get all requests with a given prompt templates source ID.
+     */
+    t.list.field('requestsByPromptTemplatesSourceId', {
+      type: 'Request',
+      args: {
+        data: nonNull(
+          arg({
+            type: 'RequestGetByPromptTemplatesSourceIdInput',
+          }),
+        ),
+      },
+      resolve: (_, args, context: Context) => {
+        return context.prisma.request.findMany({
+          where: {
+            clientId: args.data.clientId,
+            promptTemplatesSourceId: args.data.promptTemplatesSourceId,
+          },
+        })
+      },
+    })
+
+    /**
+     * Get all requests with a given insights ID.
+     */
+    t.list.field('requestsByInsightsId', {
+      type: 'Request',
+      args: {
+        data: nonNull(
+          arg({
+            type: 'RequestGetByInsightsIdInput',
+          }),
+        ),
+      },
+      resolve: (_, args, context: Context) => {
+        return context.prisma.request.findMany({
+          where: {
+            clientId: args.data.clientId,
+            insightsId: args.data.insightsId,
+          },
+        })
+      },
+    })
+
+    /**
+     * Get all requests with a given prompt ID.
+     */
+    t.list.field('requestsByPromptId', {
+      type: 'Request',
+      args: {
+        data: nonNull(
+          arg({
+            type: 'RequestGetByPromptIdInput',
+          }),
+        ),
+      },
+      resolve: (_, args, context: Context) => {
+        return context.prisma.request.findMany({
+          where: {
+            clientId: args.data.clientId,
+            promptId: args.data.promptId,
+          },
+        })
+      },
+    })
+
+    /**
      * Get all requests ordered by creation date.
      */
     t.list.field('requestsOrderedByCreatedAt', {
@@ -156,36 +244,6 @@ export const Query = objectType({
           },
           orderBy: {
             toTime: args.data.toTime,
-          },
-        })
-      },
-    })
-
-    /**
-     * Get all requests matching the provided filter.
-     */
-    t.list.field('filteredRequests', {
-      type: 'Request',
-      args: {
-        data: nonNull(
-          arg({
-            type: 'GetFilteredRequests',
-          }),
-        ),
-      },
-      resolve: (_, args, context: Context) => {
-        return context.prisma.request.findMany({
-          where: {
-            id: args.data.id,
-            clientId: args.data.clientId,
-            promptId: args.data.promptId,
-            recordsSourceId: args.data.recordsSourceId,
-            promptTemplatesSourceId: args.data.promptTemplatesSourceId,
-            fromTime: args.data.fromTime,
-            toTime: args.data.toTime,
-            status: args.data.status,
-            insightsId: args.data.insightsId,
-            createdAt: args.data.createdAt,
           },
         })
       },
