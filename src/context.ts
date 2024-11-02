@@ -20,7 +20,20 @@ export const createContext = async ({
   res: ServerResponse
 }): Promise<Context> => {
   // Get API key from headers
-  const apiKey = req.headers.authorization || ''
+  const apiKeyHeader = req.headers.authorization || ''
+  const apiKeyHeaderType = apiKeyHeader.split(' ')[0]
+  const apiKey = apiKeyHeader.split(' ')[1]
+
+  // validate header
+  if (apiKeyHeader.length === 0 || apiKeyHeaderType !== 'Bearer') {
+    // if the header is invalid, return status 401
+    throw new GraphQLError('Invalid authorization header provided', {
+      extensions: {
+        code: 'INVALID_HEADER',
+        http: { status: 401 },
+      },
+    })
+  }
 
   // Verify API key
   if (apiKey !== process.env.TRANSAC_AI_RSS_API_KEY) {
