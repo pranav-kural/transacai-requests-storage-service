@@ -7,22 +7,9 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
-input GetFilteredRequests {
-  clientId: String!
-  createdAt: DateTime
-  fromTime: DateTime
-  id: Int
-  insightsId: String
-  promptId: String
-  promptTemplatesSourceId: String
-  recordsSourceId: String
-  status: RequestStatus
-  toTime: DateTime
-}
-
 type Mutation {
   createRequest(data: RequestCreateInput!): Request
-  deleteRequest(clientId: String!, id: Int!): Request
+  deleteRequest(clientId: String!, id: String!): Request
   updateRequest(data: RequestUpdateInput!): Request
 }
 
@@ -42,9 +29,12 @@ input OrderRequestsByToTimeInput {
 }
 
 type Query {
-  filteredRequests(data: GetFilteredRequests!): [Request]
-  requestById(clientId: String!, id: Int!): Request
+  requestById(clientId: String!, id: String!): Request
   requestsByClientId(clientId: String!): [Request]
+  requestsByInsightsId(data: RequestGetByInsightsIdInput!): [Request]
+  requestsByPromptId(data: RequestGetByPromptIdInput!): [Request]
+  requestsByPromptTemplatesSourceId(data: RequestGetByPromptTemplatesSourceIdInput!): [Request]
+  requestsByRecordsSourceId(data: RequestGetByRecordsSourceIdInput!): [Request]
   requestsByStatus(data: RequestGetByStatusInput!): [Request]
   requestsByTimeRange(data: RequestGetByTimeRangeInput!): [Request]
   requestsOrderedByCreatedAt(data: OrderRequestsByCreatedAtInput!): [Request]
@@ -56,9 +46,9 @@ type Request {
   clientId: String!
   createdAt: DateTime!
   fromTime: DateTime!
-  id: Int!
+  id: String!
   insightsId: String
-  promptId: String!
+  promptId: Int!
   promptTemplatesSourceId: String!
   recordsSourceId: String!
   status: RequestStatus!
@@ -68,7 +58,7 @@ type Request {
 input RequestCreateInput {
   clientId: String!
   fromTime: DateTime!
-  promptId: String!
+  promptId: Int!
   promptTemplatesSourceId: String!
   recordsSourceId: String!
   status: RequestStatus
@@ -81,7 +71,27 @@ input RequestGetByClientIdInput {
 
 input RequestGetByIdInput {
   clientId: String!
-  id: Int!
+  id: String!
+}
+
+input RequestGetByInsightsIdInput {
+  clientId: String!
+  insightsId: String!
+}
+
+input RequestGetByPromptIdInput {
+  clientId: String!
+  promptId: Int!
+}
+
+input RequestGetByPromptTemplatesSourceIdInput {
+  clientId: String!
+  promptTemplatesSourceId: String!
+}
+
+input RequestGetByRecordsSourceIdInput {
+  clientId: String!
+  recordsSourceId: String!
 }
 
 input RequestGetByStatusInput {
@@ -104,7 +114,7 @@ enum RequestStatus {
 
 input RequestUpdateInput {
   clientId: String!
-  id: Int!
+  id: String!
   insightsId: String
   status: RequestStatus
 }
