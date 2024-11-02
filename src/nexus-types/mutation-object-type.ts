@@ -4,75 +4,77 @@ import { Context } from '../context'
 export const Mutation = objectType({
   name: 'Mutation',
   definition(t) {
-    t.nonNull.field('createInsight', {
-      type: 'Int',
+    /**
+     * Create a new request.
+     */
+    t.field('createRequest', {
+      type: 'Request',
       args: {
         data: nonNull(
           arg({
-            type: 'InsightCreateInput',
+            type: 'RequestCreateInput',
           }),
         ),
       },
-      resolve: async (_, args, context: Context) => {
-        const newInsight = await context.prisma.insight.create({
+      resolve: (_, args, context: Context) => {
+        return context.prisma.request.create({
           data: {
-            requestId: args.data.requestId,
             clientId: args.data.clientId,
-            insights: args.data.insights,
+            promptId: args.data.promptId,
+            recordsSourceId: args.data.recordsSourceId,
+            promptTemplatesSourceId: args.data.promptTemplatesSourceId,
             fromTime: args.data.fromTime,
             toTime: args.data.toTime,
-          },
-        })
-        // Return the id of the newly created insight
-        return newInsight.id
-      },
-    })
-
-    t.field('deleteInsight', {
-      type: 'Insight',
-      args: {
-        id: nonNull(intArg()),
-      },
-      resolve: (_, args, context: Context) => {
-        return context.prisma.insight.delete({
-          where: {
-            id: args.id,
+            status: args.data.status,
           },
         })
       },
     })
 
-    t.field('deleteInsightByRequestId', {
-      type: 'Insight',
+    /**
+     * Update an existing request.
+     *
+     * Only the status and insights ID can be updated.
+     */
+    t.field('updateRequest', {
+      type: 'Request',
       args: {
         data: nonNull(
           arg({
-            type: 'InsightGetByRequestIdInput',
+            type: 'RequestUpdateInput',
           }),
         ),
       },
       resolve: (_, args, context: Context) => {
-        return context.prisma.insight.delete({
+        return context.prisma.request.update({
           where: {
-            requestId: args.data.requestId,
+            id: args.data.id,
             clientId: args.data.clientId,
+          },
+          data: {
+            status: args.data.status,
+            insightsId: args.data.insightsId,
           },
         })
       },
     })
 
-    t.nonNull.field('deleteAllInsightsForClient', {
-      type: 'Int',
+    /**
+     * Delete a request by its ID and client ID.
+     */
+    t.field('deleteRequest', {
+      type: 'Request',
       args: {
+        id: nonNull(intArg()),
         clientId: nonNull(stringArg()),
       },
-      resolve: async (_, args, context: Context) => {
-        const { count } = await context.prisma.insight.deleteMany({
+      resolve: (_, args, context: Context) => {
+        return context.prisma.request.delete({
           where: {
+            id: args.id,
             clientId: args.clientId,
           },
         })
-        return count
       },
     })
   },
