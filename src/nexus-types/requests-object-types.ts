@@ -14,9 +14,9 @@ export const RequestStatus = enumType({
 export const Request = objectType({
   name: 'Request',
   definition(t) {
-    t.nonNull.int('id')
+    t.nonNull.string('id')
     t.nonNull.string('clientId')
-    t.nonNull.string('promptId')
+    t.nonNull.int('promptId')
     t.nonNull.string('recordsSourceId')
     t.nonNull.string('promptTemplatesSourceId')
     t.nonNull.field('fromTime', { type: 'DateTime' })
@@ -34,7 +34,7 @@ export const RequestCreateInput = inputObjectType({
   name: 'RequestCreateInput',
   definition(t) {
     t.nonNull.string('clientId')
-    t.nonNull.string('promptId')
+    t.nonNull.int('promptId')
     t.nonNull.string('recordsSourceId')
     t.nonNull.string('promptTemplatesSourceId')
     t.nonNull.field('fromTime', { type: 'DateTime' })
@@ -49,7 +49,7 @@ export const RequestCreateInput = inputObjectType({
 export const RequestUpdateInput = inputObjectType({
   name: 'RequestUpdateInput',
   definition(t) {
-    t.nonNull.int('id')
+    t.nonNull.string('id')
     t.nonNull.string('clientId')
     t.field('status', { type: RequestStatus })
     t.string('insightsId')
@@ -64,7 +64,7 @@ export const RequestUpdateInput = inputObjectType({
 export const GetRequestByIdInput = inputObjectType({
   name: 'RequestGetByIdInput',
   definition(t) {
-    t.nonNull.int('id')
+    t.nonNull.string('id')
     t.nonNull.string('clientId')
   },
 })
@@ -103,6 +103,50 @@ export const GetRequestsByTimeRangeInput = inputObjectType({
 })
 
 /**
+ * Definition of GetRequestsByRecordsSourceIdInput object type
+ */
+export const GetRequestsByRecordsSourceIdInput = inputObjectType({
+  name: 'RequestGetByRecordsSourceIdInput',
+  definition(t) {
+    t.nonNull.string('clientId')
+    t.nonNull.string('recordsSourceId')
+  },
+})
+
+/**
+ * Definition of GetRequestsByPromptTemplatesSourceIdInput object type
+ */
+export const GetRequestsByPromptTemplatesSourceIdInput = inputObjectType({
+  name: 'RequestGetByPromptTemplatesSourceIdInput',
+  definition(t) {
+    t.nonNull.string('clientId')
+    t.nonNull.string('promptTemplatesSourceId')
+  },
+})
+
+/**
+ * Definition of GetRequestsByInsightsIdInput object type
+ */
+export const GetRequestsByInsightsIdInput = inputObjectType({
+  name: 'RequestGetByInsightsIdInput',
+  definition(t) {
+    t.nonNull.string('clientId')
+    t.nonNull.string('insightsId')
+  },
+})
+
+/**
+ * Definition of GetRequestsByPromptIdInput object type
+ */
+export const GetRequestsByPromptIdInput = inputObjectType({
+  name: 'RequestGetByPromptIdInput',
+  definition(t) {
+    t.nonNull.string('clientId')
+    t.nonNull.int('promptId')
+  },
+})
+
+/**
  * Definition of OrderRequestsByCreatedAtInput object type
  */
 export const OrderRequestsByCreatedAtInput = inputObjectType({
@@ -132,24 +176,5 @@ export const OrderRequestsByToTimeInput = inputObjectType({
   definition(t) {
     t.nonNull.string('clientId')
     t.nonNull.field('toTime', { type: 'SortOrder' })
-  },
-})
-
-/**
- * Definition of GetFilteredRequests object type
- */
-export const GetFilteredRequests = inputObjectType({
-  name: 'GetFilteredRequests',
-  definition(t) {
-    t.int('id')
-    t.nonNull.string('clientId')
-    t.string('promptId')
-    t.string('recordsSourceId')
-    t.string('promptTemplatesSourceId')
-    t.field('fromTime', { type: 'DateTime' })
-    t.field('toTime', { type: 'DateTime' })
-    t.field('status', { type: RequestStatus })
-    t.string('insightsId')
-    t.field('createdAt', { type: 'DateTime' })
   },
 })
