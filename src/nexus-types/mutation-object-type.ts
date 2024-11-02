@@ -1,5 +1,6 @@
 import { intArg, nonNull, objectType, stringArg, arg } from 'nexus'
 import { Context } from '../context'
+import { RequestStatus } from '@prisma/client'
 
 export const Mutation = objectType({
   name: 'Mutation',
@@ -25,7 +26,7 @@ export const Mutation = objectType({
             promptTemplatesSourceId: args.data.promptTemplatesSourceId,
             fromTime: args.data.fromTime,
             toTime: args.data.toTime,
-            status: args.data.status,
+            status: args.data.status || RequestStatus.PENDING,
           },
         })
       },
@@ -46,15 +47,46 @@ export const Mutation = objectType({
         ),
       },
       resolve: (_, args, context: Context) => {
+        const newStatus = args.data.status
+        const newInsightsId = args.data.insightsId
+        // confirm at least one of the fields is being updated
+        if (!newStatus && !newInsightsId) {
+          throw new Error(
+            'At least one of the fields must be updated: status or insightsId. No action taken.',
+          )
+        }
+
+        // determine the data to update
+        let data:
+          | undefined
+          | { status: RequestStatus }
+          | { insightsId: string }
+          | { status: RequestStatus; insightsId: string } = undefined
+
+        if (newStatus && newInsightsId) {
+          data = {
+            status: newStatus,
+            insightsId: newInsightsId,
+          }
+        } else if (newStatus) {
+          data = {
+            status: newStatus,
+          }
+        } else if (newInsightsId) {
+          data = {
+            insightsId: newInsightsId,
+          }
+        } else {
+          throw new Error('Unexpected error parsing new data. No action taken.')
+        }
+
+        // update the request
         return context.prisma.request.update({
           where: {
             id: args.data.id,
             clientId: args.data.clientId,
           },
-          data: {
-            status: args.data.status,
-            insightsId: args.data.insightsId,
-          },
+          data,
         })
       },
     })
@@ -65,7 +97,7 @@ export const Mutation = objectType({
     t.field('deleteRequest', {
       type: 'Request',
       args: {
-        id: nonNull(intArg()),
+        id: nonNull(stringArg()),
         clientId: nonNull(stringArg()),
       },
       resolve: (_, args, context: Context) => {
