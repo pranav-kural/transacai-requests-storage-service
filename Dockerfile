@@ -19,6 +19,9 @@ COPY . .
 # Build the application
 RUN pnpm run build
 
+# Set environment as production (disables introspection)
+ENV NODE_ENV production
+
 # Expose the port the app runs on
 EXPOSE 4000
 
