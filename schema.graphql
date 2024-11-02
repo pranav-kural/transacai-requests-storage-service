@@ -7,53 +7,106 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
-type Insight {
+input GetFilteredRequests {
+  clientId: String!
+  createdAt: DateTime
+  fromTime: DateTime
+  id: Int
+  insightsId: String
+  promptId: String
+  promptTemplatesSourceId: String
+  recordsSourceId: String
+  status: RequestStatus
+  toTime: DateTime
+}
+
+type Mutation {
+  createRequest(data: RequestCreateInput!): Request
+  deleteRequest(clientId: String!, id: Int!): Request
+  updateRequest(data: RequestUpdateInput!): Request
+}
+
+input OrderRequestsByCreatedAtInput {
+  clientId: String!
+  createdAt: SortOrder!
+}
+
+input OrderRequestsByFromTimeInput {
+  clientId: String!
+  fromTime: SortOrder!
+}
+
+input OrderRequestsByToTimeInput {
+  clientId: String!
+  toTime: SortOrder!
+}
+
+type Query {
+  filteredRequests(data: GetFilteredRequests!): [Request]
+  requestById(clientId: String!, id: Int!): Request
+  requestsByClientId(clientId: String!): [Request]
+  requestsByStatus(data: RequestGetByStatusInput!): [Request]
+  requestsByTimeRange(data: RequestGetByTimeRangeInput!): [Request]
+  requestsOrderedByCreatedAt(data: OrderRequestsByCreatedAtInput!): [Request]
+  requestsOrderedByFromTime(data: OrderRequestsByFromTimeInput!): [Request]
+  requestsOrderedByToTime(data: OrderRequestsByToTimeInput!): [Request]
+}
+
+type Request {
   clientId: String!
   createdAt: DateTime!
   fromTime: DateTime!
   id: Int!
-  insights: String!
-  requestId: String!
+  insightsId: String
+  promptId: String!
+  promptTemplatesSourceId: String!
+  recordsSourceId: String!
+  status: RequestStatus!
   toTime: DateTime!
 }
 
-input InsightCreateInput {
+input RequestCreateInput {
   clientId: String!
   fromTime: DateTime!
-  insights: String!
-  requestId: String!
+  promptId: String!
+  promptTemplatesSourceId: String!
+  recordsSourceId: String!
+  status: RequestStatus
   toTime: DateTime!
 }
 
-input InsightGetByRequestIdInput {
+input RequestGetByClientIdInput {
   clientId: String!
-  requestId: String!
 }
 
-input InsightsOrderedByCreatedAtInput {
+input RequestGetByIdInput {
   clientId: String!
-  createdAt: SortOrder!
-  limit: Int
+  id: Int!
 }
 
-input InsightsTimeRangeInput {
+input RequestGetByStatusInput {
+  clientId: String!
+  status: RequestStatus!
+}
+
+input RequestGetByTimeRangeInput {
+  clientId: String!
   fromTime: DateTime!
   toTime: DateTime!
 }
 
-type Mutation {
-  createInsight(data: InsightCreateInput!): Int!
-  deleteAllInsightsForClient(clientId: String!): Int!
-  deleteInsight(id: Int!): Insight
-  deleteInsightByRequestId(data: InsightGetByRequestIdInput!): Insight
+enum RequestStatus {
+  FAILED
+  PENDING
+  PROCESSING
+  SUCCESS
 }
 
-type Query {
-  allInsightsForClient(clientId: String!): [Insight]
-  insightById(id: Int!): Insight
-  insightByRequestId(data: InsightGetByRequestIdInput!): Insight
-  insightsInTimeRange(data: InsightsTimeRangeInput!): [Insight]
-  insightsOrderedByCreatedAt(data: InsightsOrderedByCreatedAtInput!): [Insight]!
+input RequestUpdateInput {
+  clientId: String!
+  id: Int!
+  insightsId: String
+  status: RequestStatus
 }
 
 enum SortOrder {

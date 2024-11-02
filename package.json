@@ -1,5 +1,7 @@
 {
-  "name": "typescript-graphql-nexus",
+  "name": "transac-ai-requests-storage-service",
+  "version": "1.0.0",
+  "description": "GraphQL API service of TransacAI project for managing requests storage",
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev --no-notify --respawn --transpile-only src/server",

@@ -8,13 +8,24 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// Data model for a single Insight
-model Insight {
-  id        Int      @id @default(autoincrement())
-  requestId String   @unique
-  clientId  String
-  insights  String
-  fromTime  DateTime
-  toTime    DateTime
-  createdAt DateTime @default(now())
+// Enum for Request Status
+enum RequestStatus {
+  PENDING
+  PROCESSING
+  SUCCESS
+  FAILED
+}
+
+// Data model for a single Request
+model Request {
+  id                        String @id @default(uuid())
+  clientId                  String
+  promptId                  String
+  recordsSourceId           String
+  promptTemplatesSource_id  String
+  fromTime                  DateTime
+  toTime                    DateTime
+  status                    RequestStatus @default(PENDING)
+  insightsId                String?
+  createdAt                 DateTime @default(now())
 }

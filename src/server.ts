@@ -18,7 +18,7 @@ const start = async () => {
   })
 
   console.log(`\
-  🚀 Transac AI ISS listening at: ${url}`)
+  🚀 Transac AI RSS listening at: ${url}`)
 }
 
 // start on load
