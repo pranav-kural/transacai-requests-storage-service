@@ -13,32 +13,32 @@ spec:
         app: transac-ai-rss
     spec:
       containers:
-        - name: rss-app
-          image: us-east1-docker.pkg.dev/transac-ai/rss-repo/transac-ai-rss-gke:1.0.1
-          ports:
-            - containerPort: 4000
-          env:
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: transac-ai-rss-secrets
-                  key: transac-ai-rss-database-url
-            - name: DIRECT_URL
-              valueFrom:
-                secretKeyRef:
-                  name: transac-ai-rss-secrets
-                  key: transac-ai-rss-direct-url
-            - name: TRANSAC_AI_RSS_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: transac-ai-rss-secrets
-                  key: transac-ai-rss-api-key
-          resources:
-            requests:
-              memory: '256Mi'
-              cpu: '50m'
-              ephemeral-storage: '256Mi'
-            limits:
-              memory: '512Mi'
-              cpu: '100m'
-              ephemeral-storage: '500Mi'
+      - name: rss-app
+        image: us-east1-docker.pkg.dev/transac-ai/rss-repo/transac-ai-rss-gke:1.0.1
+        ports:
+        - containerPort: 4000
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: transac-ai-rss-secrets
+              key: transac-ai-rss-database-url
+        - name: DIRECT_URL
+          valueFrom:
+            secretKeyRef:
+              name: transac-ai-rss-secrets
+              key: transac-ai-rss-direct-url
+        - name: TRANSAC_AI_RSS_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: transac-ai-rss-secrets
+              key: transac-ai-rss-api-key
+        resources:
+          requests:
+            memory: '180Mi'
+            cpu: '50m'
+            ephemeral-storage: '10Mi'
+          limits:
+            memory: '256Mi'
+            cpu: '100m'
+            ephemeral-storage: '52Mi'
